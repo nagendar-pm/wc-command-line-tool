@@ -5,7 +5,7 @@
 
 package com.nagendar.learning.exceptions;
 
-public class InvalidNumberOfArgumentsException extends RuntimeException{
+public class InvalidNumberOfArgumentsException extends BaseException{
 	public InvalidNumberOfArgumentsException(String message) {
 		super(message);
 	}
