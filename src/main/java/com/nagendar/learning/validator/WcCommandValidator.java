@@ -22,6 +22,7 @@ public class WcCommandValidator implements CommandValidator{
 	public boolean validate(Command command) {
 		// we are validating everything and if anything
 		// fails validation, exception is thrown then and there
+		// TODO: where are we validating if `wc` is called correctly?
 		List<String> options = command.getParams();
 		if (options.size() == 1) {
 			validateCommandFilePath(command);

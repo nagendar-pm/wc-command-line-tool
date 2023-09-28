@@ -5,5 +5,6 @@ package com.nagendar.learning.constants;/*
 
 public interface CommonConstants {
 	public final String WHITESPACE_DELIMITER = " ";
-	public final String BASE_PATH = "./";
+	public final String BASE_PATH = "";
+	public final String WC_COMMAND = "nagi_wc";
 }

@@ -10,16 +10,17 @@ import com.nagendar.learning.exceptions.InvalidNumberOfArgumentsException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Command {
 	private final String commandName;
 	private final List<String> params;
 
-	public Command(String input) throws Exception {
+	public Command(String input) {
 		List<String> tokens = Arrays.stream(input.trim().split(CommonConstants.WHITESPACE_DELIMITER))
 				.map(String::trim)
 				.filter(token -> !token.isEmpty())
-				.toList();
+				.collect(Collectors.toList());
 		if (tokens.size() < 2) {
 			throw new InvalidNumberOfArgumentsException("Invalid no of params provided");
 		}
