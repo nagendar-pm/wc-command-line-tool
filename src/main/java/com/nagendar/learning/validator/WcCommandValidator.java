@@ -57,5 +57,8 @@ public class WcCommandValidator implements CommandValidator{
 		if (!FileUtils.checkIfFileExists(filePath)) {
 			throw new FileDoesNotExistsException(String.format("File %s not exists!", filePath));
 		}
+		if (!FileUtils.isFile(filePath)) {
+			throw new FileDoesNotExistsException(String.format("Provided path is not a file: %s", filePath));
+		}
 	}
 }

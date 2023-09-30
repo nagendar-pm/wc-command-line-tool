@@ -17,8 +17,9 @@ public class FileUtils {
 		return Files.exists(path);
 	}
 
-	public static boolean isSupportedTextFile(String filePath) {
-		return true;
+	public static boolean isFile(String filePath) {
+		Path path = Paths.get(filePath);
+		return Files.isRegularFile(path);
 	}
 
 	public static String toAbsolutePath(String maybeRelative) {
