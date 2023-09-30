@@ -5,6 +5,8 @@
 
 package com.nagendar.learning.utils;
 
+import com.nagendar.learning.constants.CommonConstants;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,8 +14,20 @@ import java.nio.file.Paths;
 public class FileUtils {
 	public static boolean checkIfFileExists(String filePath) {
 		Path path = Paths.get(filePath);
-		Path absolutePath = path.toAbsolutePath();
-		System.out.println("absolutePath = " + absolutePath);
 		return Files.exists(path);
+	}
+
+	public static boolean isSupportedTextFile(String filePath) {
+		return true;
+	}
+
+	public static String toAbsolutePath(String maybeRelative) {
+		Path path = Paths.get(maybeRelative);
+		Path effectivePath = path;
+		if (!path.isAbsolute()) {
+			Path base = Paths.get("");
+			effectivePath = base.resolve(path).toAbsolutePath();
+		}
+		return effectivePath.normalize().toString();
 	}
 }

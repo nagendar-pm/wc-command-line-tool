@@ -53,7 +53,7 @@ public class WcCommandValidator implements CommandValidator{
 	}
 
 	private void validateCommandFilePath(String filePath) {
-		filePath = CommonConstants.BASE_PATH + filePath;
+		filePath = FileUtils.toAbsolutePath(filePath);
 		if (!FileUtils.checkIfFileExists(filePath)) {
 			throw new FileDoesNotExistsException(String.format("File %s not exists!", filePath));
 		}

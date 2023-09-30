@@ -28,16 +28,15 @@ public class WcCommandExecutor implements CommandExecutor{
 	@Override
 	public void execute(Command command) {
 		List<String> options = command.getParams();
-		String commandOption, fileName, filePath;
+		String commandOption, filePath;
 		if (options.size() == 2) {
 			commandOption = options.get(0);
-			fileName = options.get(1);
+			filePath = options.get(1);
 		}
 		else {
 			commandOption = "";
-			fileName = options.get(0);
+			filePath = options.get(0);
 		}
-		filePath = CommonConstants.BASE_PATH + fileName;
 		execute(commandOption, filePath);
 	}
 
