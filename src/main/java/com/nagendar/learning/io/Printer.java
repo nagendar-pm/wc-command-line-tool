@@ -3,6 +3,12 @@ package com.nagendar.learning.io;/*
  * @createdAt: 28/09/23 12:48 pm
  */
 
+import java.util.List;
+
 public interface Printer {
-	void print(String message);
+	default void print(String message) {
+	}
+
+	default void print(List<String> message) {
+	}
 }

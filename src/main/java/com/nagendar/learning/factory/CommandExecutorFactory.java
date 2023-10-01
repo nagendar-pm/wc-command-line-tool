@@ -20,11 +20,11 @@ import java.util.Objects;
 public class CommandExecutorFactory {
 	Map<String, CommandExecutor> commandExecutorMap;
 
-	public CommandExecutorFactory(Printer printer) {
+	public CommandExecutorFactory(Printer consolePrinter, Printer filePrinter) {
 		this.commandExecutorMap = new HashMap<>();
-		commandExecutorMap.put(CommonConstants.WC_COMMAND, new WcCommandExecutor(printer));
-		commandExecutorMap.put(CommonConstants.EXIT_COMMAND, new ExitCommandExecutor(printer));
-		commandExecutorMap.put(CommonConstants.NON_WC_COMMAND, new NonWcCommandExecutor(printer));
+		commandExecutorMap.put(CommonConstants.WC_COMMAND, new WcCommandExecutor(consolePrinter));
+		commandExecutorMap.put(CommonConstants.EXIT_COMMAND, new ExitCommandExecutor(consolePrinter));
+		commandExecutorMap.put(CommonConstants.NON_WC_COMMAND, new NonWcCommandExecutor(consolePrinter, filePrinter));
 	}
 
 	public CommandExecutor getCommandExecutor(Command command) {

@@ -8,6 +8,7 @@ package com.nagendar.learning;
 import com.nagendar.learning.factory.CommandExecutorFactory;
 import com.nagendar.learning.factory.CommandValidatorFactory;
 import com.nagendar.learning.io.ConsolePrinter;
+import com.nagendar.learning.io.FilePrinter;
 import com.nagendar.learning.io.Printer;
 import com.nagendar.learning.mode.CommandMode;
 import com.nagendar.learning.mode.PipedCommandMode;
@@ -21,9 +22,10 @@ import java.io.InputStreamReader;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		Printer printer = new ConsolePrinter();
+		Printer consolePrinter = new ConsolePrinter();
+		Printer filePrinter = new FilePrinter();
 		CommandValidatorFactory commandValidatorFactory = new CommandValidatorFactory();
-		CommandExecutorFactory commandExecutorFactory = new CommandExecutorFactory(printer);
+		CommandExecutorFactory commandExecutorFactory = new CommandExecutorFactory(consolePrinter, filePrinter);
 		CommandProcessorService commandProcessorService =
 				new CommandProcessorServiceImpl(commandValidatorFactory, commandExecutorFactory);
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
