@@ -6,10 +6,10 @@
 package com.nagendar.learning.factory;
 
 import com.nagendar.learning.constants.CommonConstants;
-import com.nagendar.learning.exceptions.UnknownCommandException;
 import com.nagendar.learning.models.Command;
 import com.nagendar.learning.validator.CommandValidator;
 import com.nagendar.learning.validator.ExitCommandValidator;
+import com.nagendar.learning.validator.NonWcCommandValidator;
 import com.nagendar.learning.validator.WcCommandValidator;
 
 import java.util.HashMap;
@@ -23,12 +23,13 @@ public class CommandValidatorFactory {
 		this.commandValidatorMap = new HashMap<>();
 		commandValidatorMap.put(CommonConstants.WC_COMMAND, new WcCommandValidator());
 		commandValidatorMap.put(CommonConstants.EXIT_COMMAND, new ExitCommandValidator());
+		commandValidatorMap.put(CommonConstants.NON_WC_COMMAND, new NonWcCommandValidator());
 	}
 
 	public CommandValidator getCommandValidator(Command command) {
 		CommandValidator commandValidator = commandValidatorMap.get(command.getCommandName());
 		if (Objects.isNull(commandValidator)) {
-			throw new UnknownCommandException(String.format("Unknown command found: %s", command.getCommandName()));
+			commandValidator = commandValidatorMap.get(CommonConstants.NON_WC_COMMAND);
 		}
 		return commandValidator;
 	}

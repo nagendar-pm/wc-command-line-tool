@@ -6,9 +6,9 @@
 package com.nagendar.learning.factory;
 
 import com.nagendar.learning.constants.CommonConstants;
-import com.nagendar.learning.exceptions.UnknownCommandException;
 import com.nagendar.learning.executor.CommandExecutor;
 import com.nagendar.learning.executor.ExitCommandExecutor;
+import com.nagendar.learning.executor.NonWcCommandExecutor;
 import com.nagendar.learning.executor.WcCommandExecutor;
 import com.nagendar.learning.io.Printer;
 import com.nagendar.learning.models.Command;
@@ -24,12 +24,13 @@ public class CommandExecutorFactory {
 		this.commandExecutorMap = new HashMap<>();
 		commandExecutorMap.put(CommonConstants.WC_COMMAND, new WcCommandExecutor(printer));
 		commandExecutorMap.put(CommonConstants.EXIT_COMMAND, new ExitCommandExecutor(printer));
+		commandExecutorMap.put(CommonConstants.NON_WC_COMMAND, new NonWcCommandExecutor(printer));
 	}
 
 	public CommandExecutor getCommandExecutor(Command command) {
 		CommandExecutor commandExecutor = commandExecutorMap.get(command.getCommandName());
 		if (Objects.isNull(commandExecutor)) {
-			throw new UnknownCommandException(String.format("Unknown command found: %s", command.getCommandName()));
+			commandExecutor = commandExecutorMap.get(CommonConstants.NON_WC_COMMAND);
 		}
 		return commandExecutor;
 	}

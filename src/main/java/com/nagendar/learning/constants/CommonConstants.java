@@ -9,4 +9,5 @@ public interface CommonConstants {
 	String WC_COMMAND = "nagi_wc";
 	String EXIT_COMMAND = "exit";
 	String TEMP_FILE_PATH = "resources/temp.txt";
+	String NON_WC_COMMAND = "non_wc_command";
 }
