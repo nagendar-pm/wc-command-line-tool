@@ -2,14 +2,14 @@
 'https://plantuml.com/class-diagram
 
 class Command {
-    private final String commandStr;
-    private String commandName;
-    private final String[] rawCommand;
-    private List<String> params;
+    - String commandStr
+    - String commandName
+    - String[] rawCommand
+    - List<String> params
 }
 
 interface CommandValidator {
-    + boolean validate(Command command);
+    + boolean validate(Command command)
 }
 
 class WcCommandValidator implements CommandValidator {
@@ -29,11 +29,11 @@ class NonWcCommandValidator implements CommandValidator {
 }
 
 interface CommandExecutor {
-	void execute(Command command);
+	void execute(Command command)
 }
 
 class WcCommandExecutor implements CommandExecutor {
-    - Printer printer;
+    - Printer printer
     + void execute(Command command)
     - void execute(String commandOption, String filePath)
     - void computeEveryCount(String filePath)
@@ -44,23 +44,23 @@ class WcCommandExecutor implements CommandExecutor {
 }
 
 class ExitCommandExecutor implements CommandExecutor {
-    - Printer printer;
+    - Printer printer
     + void execute(Command command)
 }
 
 class NonWcCommandExecutor implements CommandExecutor{
-	private final Printer consolePrinter;
-	private final Printer filePrinter;
+	-  Printer consolePrinter
+	-  Printer filePrinter
 	+ void execute(Command command)
 }
 
 class CommandExecutorFactory {
-	- Map<String, CommandExecutor> commandExecutorMap;
+	- Map<String, CommandExecutor> commandExecutorMap
 	+ CommandExecutor getCommandExecutor(Command command)
 }
 
 class CommandValidatorFactory {
-	- Map<String, CommandValidator> commandValidatorMap;
+	- Map<String, CommandValidator> commandValidatorMap
 	+ CommandValidator getCommandValidator(Command command)
 }
 
@@ -68,12 +68,12 @@ CommandValidatorFactory -down- CommandValidator
 CommandExecutorFactory -down- CommandExecutor
 
 interface CommandProcessorService {
-	void processCommand(Command command);
+	void processCommand(Command command)
 }
 
 class CommandProcessorServiceImpl  {
-    - CommandValidatorFactory commandValidatorFactory;
-    - CommandExecutorFactory commandExecutorFactory;
+    - CommandValidatorFactory commandValidatorFactory
+    - CommandExecutorFactory commandExecutorFactory
     + void processCommand(Command command)
 }
 
@@ -83,16 +83,16 @@ CommandProcessorService -right- CommandValidatorFactory
 CommandProcessorService -left- CommandExecutorFactory
 
 interface CommandMode {
-	+ void process(String input);
+	+ void process(String input)
 }
 
 class SingleCommandMode implements CommandMode {
-    - CommandProcessorService commandProcessorService;
+    - CommandProcessorService commandProcessorService
     + void process(String input)
 }
 
 class PipedCommandMode implements CommandMode {
-    - CommandProcessorService commandProcessorService;
+    - CommandProcessorService commandProcessorService
     + void process(String input)
     - String buildCommandWithFilepath(String command, boolean isFirstCommand)
 }
