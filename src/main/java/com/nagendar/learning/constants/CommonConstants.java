@@ -4,7 +4,9 @@ package com.nagendar.learning.constants;/*
  */
 
 public interface CommonConstants {
-	public final String WHITESPACE_DELIMITER = " ";
-	public final String WC_COMMAND = "nagi_wc";
-	public final String EXIT_COMMAND = "exit";
+	String WHITESPACE_DELIMITER = " ";
+	String PIPE_OPERATOR = "\\|";
+	String WC_COMMAND = "nagi_wc";
+	String EXIT_COMMAND = "exit";
+	String TEMP_FILE_PATH = "resources/temp.txt";
 }
