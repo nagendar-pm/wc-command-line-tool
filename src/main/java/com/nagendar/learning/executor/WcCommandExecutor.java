@@ -5,7 +5,6 @@
 
 package com.nagendar.learning.executor;
 
-import com.nagendar.learning.constants.CommonConstants;
 import com.nagendar.learning.exceptions.IllegalArgumentException;
 import com.nagendar.learning.io.Printer;
 import com.nagendar.learning.models.Command;
@@ -69,7 +68,7 @@ public class WcCommandExecutor implements CommandExecutor{
 					.sum();
 			printer.print(String.format("Characters: %s", characterCount));
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -80,7 +79,7 @@ public class WcCommandExecutor implements CommandExecutor{
 					.sum();
 			printer.print(String.format("Words: %s", wordCount));
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -90,7 +89,7 @@ public class WcCommandExecutor implements CommandExecutor{
 			long lineCount = lineStream.count();
 			printer.print(String.format("Lines: %s", lineCount));
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 	}
 
@@ -100,7 +99,7 @@ public class WcCommandExecutor implements CommandExecutor{
 			long bytes = Files.size(path);
 			printer.print(String.format("Bytes: %s", bytes));
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
 		}
 	}
 }

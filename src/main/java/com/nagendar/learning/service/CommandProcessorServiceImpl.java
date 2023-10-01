@@ -5,25 +5,27 @@
 
 package com.nagendar.learning.service;
 
-import com.nagendar.learning.executor.CommandExecutor;
+import com.nagendar.learning.factory.CommandExecutorFactory;
+import com.nagendar.learning.factory.CommandValidatorFactory;
 import com.nagendar.learning.models.Command;
-import com.nagendar.learning.validator.CommandValidator;
 
 public class CommandProcessorServiceImpl implements CommandProcessorService{
-	private final CommandValidator commandValidator;
-	private final CommandExecutor commandExecutor;
+	private final CommandValidatorFactory commandValidatorFactory;
+	private final CommandExecutorFactory commandExecutorFactory;
 
-	public CommandProcessorServiceImpl(CommandValidator commandValidator,
-	                                   CommandExecutor commandExecutor) {
-		this.commandValidator = commandValidator;
-		this.commandExecutor = commandExecutor;
+	public CommandProcessorServiceImpl(CommandValidatorFactory commandValidatorFactory,
+	                                   CommandExecutorFactory commandExecutorFactory) {
+		this.commandValidatorFactory = commandValidatorFactory;
+		this.commandExecutorFactory = commandExecutorFactory;
 	}
 
 	@Override
 	public void processCommand(Command command) {
-		boolean isValidCommand = commandValidator.validate(command);
+		boolean isValidCommand = commandValidatorFactory.getCommandValidator(command)
+				.validate(command);
 		if (isValidCommand) {
-			commandExecutor.execute(command);
+			commandExecutorFactory.getCommandExecutor(command)
+					.execute(command);
 		}
 	}
 }

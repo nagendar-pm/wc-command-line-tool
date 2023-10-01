@@ -21,7 +21,7 @@ public class Command {
 				.map(String::trim)
 				.filter(token -> !token.isEmpty())
 				.collect(Collectors.toList());
-		if (tokens.size() < 2) {
+		if (tokens.isEmpty()) {
 			throw new InvalidNumberOfArgumentsException("Invalid no of params provided");
 		}
 		this.commandName = tokens.get(0).toLowerCase();

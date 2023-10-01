@@ -6,4 +6,5 @@ package com.nagendar.learning.constants;/*
 public interface CommonConstants {
 	public final String WHITESPACE_DELIMITER = " ";
 	public final String WC_COMMAND = "nagi_wc";
+	public final String EXIT_COMMAND = "exit";
 }
