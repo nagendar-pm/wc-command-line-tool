@@ -1,0 +1,102 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Command {
+    private final String commandStr;
+    private String commandName;
+    private final String[] rawCommand;
+    private List<String> params;
+}
+
+interface CommandValidator {
+    + boolean validate(Command command);
+}
+
+class WcCommandValidator implements CommandValidator {
+    - Set<String> allowedOptions
+    + boolean validate(Command command)
+    - void validateCommandOptionsAndFilePath(Command command)
+    - void validateCommandFilePath(Command command)
+    - void validateCommandFilePath(String filePath)
+}
+
+class ExitCommandValidator implements CommandValidator {
+    + boolean validate(Command command)
+}
+
+class NonWcCommandValidator implements CommandValidator {
+    + boolean validate(Command command)
+}
+
+interface CommandExecutor {
+	void execute(Command command);
+}
+
+class WcCommandExecutor implements CommandExecutor {
+    - Printer printer;
+    + void execute(Command command)
+    - void execute(String commandOption, String filePath)
+    - void computeEveryCount(String filePath)
+    - void computeCharacterCount(String filePath)
+    - void computeWordCount(String filePath)
+    - void computeLineCount(String filePath)
+    - void computeByteCount(String filePath)
+}
+
+class ExitCommandExecutor implements CommandExecutor {
+    - Printer printer;
+    + void execute(Command command)
+}
+
+class NonWcCommandExecutor implements CommandExecutor{
+	private final Printer consolePrinter;
+	private final Printer filePrinter;
+	+ void execute(Command command)
+}
+
+class CommandExecutorFactory {
+	- Map<String, CommandExecutor> commandExecutorMap;
+	+ CommandExecutor getCommandExecutor(Command command)
+}
+
+class CommandValidatorFactory {
+	- Map<String, CommandValidator> commandValidatorMap;
+	+ CommandValidator getCommandValidator(Command command)
+}
+
+CommandValidatorFactory -down- CommandValidator
+CommandExecutorFactory -down- CommandExecutor
+
+interface CommandProcessorService {
+	void processCommand(Command command);
+}
+
+class CommandProcessorServiceImpl  {
+    - CommandValidatorFactory commandValidatorFactory;
+    - CommandExecutorFactory commandExecutorFactory;
+    + void processCommand(Command command)
+}
+
+CommandProcessorServiceImpl .down.|> CommandProcessorService
+
+CommandProcessorService -right- CommandValidatorFactory
+CommandProcessorService -left- CommandExecutorFactory
+
+interface CommandMode {
+	+ void process(String input);
+}
+
+class SingleCommandMode implements CommandMode {
+    - CommandProcessorService commandProcessorService;
+    + void process(String input)
+}
+
+class PipedCommandMode implements CommandMode {
+    - CommandProcessorService commandProcessorService;
+    + void process(String input)
+    - String buildCommandWithFilepath(String command, boolean isFirstCommand)
+}
+
+CommandMode -up- CommandProcessorService
+
+@enduml

@@ -11,4 +11,7 @@ Simple command line tool - wc - cloned using java
 1. Integration of multiple options at once, both at a time
 and separated by spaces
 2. File path with spaces in names
-3. Draw class and sequence diagrams for this
+
+## Diagrams
+1. Class Diagram
+![Class diagram for wc-command-line-tool](resources/wc-command-line-tool-class-diagram.png "Class diagram")

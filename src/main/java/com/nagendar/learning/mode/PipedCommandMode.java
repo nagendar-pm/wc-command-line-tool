@@ -8,7 +8,6 @@ package com.nagendar.learning.mode;
 import com.nagendar.learning.models.Command;
 import com.nagendar.learning.service.CommandProcessorService;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
@@ -23,7 +22,7 @@ public class PipedCommandMode implements CommandMode{
 	}
 
 	@Override
-	public void process(String input) throws IOException {
+	public void process(String input) {
 		// 1. List the commands split by the | operator
 		// 2. Run whatever commands we get by using runtime process
 		// 3. Store the output of other commands in the file and use it with the wc later
