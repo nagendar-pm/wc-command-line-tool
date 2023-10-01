@@ -19,6 +19,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.nagendar.learning.constants.CommonConstants.*;
 
@@ -35,16 +37,51 @@ public class PipedCommandMode implements CommandMode{
 		// 2. Run whatever commands we get by using runtime process
 		// 3. Store the output of other commands in the file and use it with the wc later
 		// For now we will think of wc as a terminal command
-		List<String> commands = Arrays.stream(input.split(PIPE_OPERATOR))
+		LinkedList<String> commands = Arrays.stream(input.split(PIPE_OPERATOR))
 				.map(String::trim)
-				.toList();
+				.collect(Collectors.toCollection(LinkedList::new));
 
-		List<String> nonWcCommandOutputLines = executeNonWcCommand(commands);
-		saveLinesToFile(nonWcCommandOutputLines);
+		processNonWcCommands(commands);
 
-		String wcCommand = commands.get(1) + WHITESPACE_DELIMITER + TEMP_FILE_PATH;
+		String wcCommand = buildCommandWithFilepath(commands.poll(), false);
 		Command command = new Command(wcCommand);
 		commandProcessorService.processCommand(command);
+	}
+
+	private void processNonWcCommands(LinkedList<String> commands) throws IOException {
+		int size = commands.size();
+		boolean isFirstCommand = true;
+
+		while (size-- > 1) {
+			String command = commands.poll();
+			command = buildCommandWithFilepath(command, isFirstCommand);
+			assert command != null;
+			List<String> outputLines = executeNonWcCommand(command);
+			saveLinesToFile(outputLines);
+			isFirstCommand = false;
+		}
+	}
+
+	private List<String> executeNonWcCommand(String command) {
+		List<String> outputLines = new LinkedList<>();
+		try {
+			Process process = Runtime.getRuntime()
+					.exec(command.split(WHITESPACE_DELIMITER));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				outputLines.add(line);
+			}
+		} catch (IOException e) {
+			throw new UnknownCommandException(String.format("Unknown Shell command triggered: %s", command));
+		}
+		return outputLines;
+	}
+
+	private String buildCommandWithFilepath(String command, boolean isFirstCommand) {
+		if (isFirstCommand) return command;
+		return command + WHITESPACE_DELIMITER + TEMP_FILE_PATH;
 	}
 
 	private void saveLinesToFile(List<String> nonWcCommandOutputLines) throws IOException {
@@ -52,20 +89,4 @@ public class PipedCommandMode implements CommandMode{
 		Files.write(path, nonWcCommandOutputLines, StandardCharsets.UTF_8);
 	}
 
-	private List<String> executeNonWcCommand(List<String> commands) {
-		String firstCommand = commands.get(0);
-		List<String> outputLines = new LinkedList<>();
-		try {
-			Process process = Runtime.getRuntime()
-					.exec(firstCommand.split(WHITESPACE_DELIMITER));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				outputLines.add(line);
-			}
-		} catch (IOException e) {
-			throw new UnknownCommandException(String.format("Unknown Shell command triggered: %s", firstCommand));
-		}
-		return outputLines;
-	}
 }
