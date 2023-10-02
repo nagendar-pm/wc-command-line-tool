@@ -6,13 +6,11 @@ package com.nagendar.learning;
  */
 
 import com.nagendar.learning.factory.CommandExecutorFactory;
+import com.nagendar.learning.factory.CommandModeFactory;
 import com.nagendar.learning.factory.CommandValidatorFactory;
 import com.nagendar.learning.io.ConsolePrinter;
 import com.nagendar.learning.io.FilePrinter;
 import com.nagendar.learning.io.Printer;
-import com.nagendar.learning.mode.CommandMode;
-import com.nagendar.learning.mode.PipedCommandMode;
-import com.nagendar.learning.mode.SingleCommandMode;
 import com.nagendar.learning.service.CommandProcessorService;
 import com.nagendar.learning.service.CommandProcessorServiceImpl;
 
@@ -28,17 +26,11 @@ public class Main {
 		CommandExecutorFactory commandExecutorFactory = new CommandExecutorFactory(consolePrinter, filePrinter);
 		CommandProcessorService commandProcessorService =
 				new CommandProcessorServiceImpl(commandValidatorFactory, commandExecutorFactory);
+		CommandModeFactory commandModeFactory = new CommandModeFactory(commandProcessorService);
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		final CommandMode singleCommandMode = new SingleCommandMode(commandProcessorService);
-		final CommandMode pipedCommandMode = new PipedCommandMode(commandProcessorService);
 		while (true) {
 			final String input = reader.readLine();
-			if (input.contains("|")) {
-				pipedCommandMode.process(input);
-			}
-			else {
-				singleCommandMode.process(input);
-			}
+			commandModeFactory.getCommandMode(input).process(input);
 		}
 	}
 }
