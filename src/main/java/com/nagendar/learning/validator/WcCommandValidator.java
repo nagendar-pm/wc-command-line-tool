@@ -7,44 +7,31 @@ package com.nagendar.learning.validator;
 
 import com.nagendar.learning.exceptions.FileDoesNotExistsException;
 import com.nagendar.learning.exceptions.IllegalArgumentException;
-import com.nagendar.learning.exceptions.InvalidNumberOfArgumentsException;
 import com.nagendar.learning.models.Command;
 import com.nagendar.learning.utils.FileUtils;
 
-import java.util.List;
 import java.util.Set;
 
+import static com.nagendar.learning.constants.CommonConstants.WC_COMMAND_ALLOWED_OPTIONS;
+
 public class WcCommandValidator implements CommandValidator{
-	private final Set<String> allowedOptions = Set.of("-c", "-l", "-m", "-w");
 
 	@Override
 	public boolean validate(Command command) {
-		List<String> options = command.getParams();
-		if (options.size() == 1) {
-			validateCommandFilePath(command);
-		}
-		else if (options.size() == 2) {
-			validateCommandOptionsAndFilePath(command);
-		}
-		else {
-			throw new InvalidNumberOfArgumentsException(
-					String.format("Expected 1 or 2 args, but found %s", options.size()));
-		}
+		validateCommandOptionsAndFilePath(command);
 		return true;
 	}
 
 	private void validateCommandOptionsAndFilePath(Command command) {
-		List<String> options = command.getParams();
-		String commandOption = options.get(0);
-		String filePath = options.get(1);
-		if (!allowedOptions.contains(commandOption)) {
-			throw new IllegalArgumentException("Arguments provided in the command are not allowed");
+		command.parseParams();
+		Set<String> options = command.getParamsSet();
+		String filePath = command.getFilepath();
+		for (String commandOption : options) {
+			if (!WC_COMMAND_ALLOWED_OPTIONS.contains(commandOption)) {
+				throw new IllegalArgumentException(
+						String.format("Arguments provided in the command are not allowed: -%s", commandOption));
+			}
 		}
-		validateCommandFilePath(filePath);
-	}
-
-	private void validateCommandFilePath(Command command) {
-		String filePath = command.getParams().get(0);
 		validateCommandFilePath(filePath);
 	}
 

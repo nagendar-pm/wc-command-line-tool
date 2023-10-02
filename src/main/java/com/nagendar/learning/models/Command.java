@@ -8,9 +8,7 @@ package com.nagendar.learning.models;
 import com.nagendar.learning.constants.CommonConstants;
 import com.nagendar.learning.exceptions.InvalidNumberOfArgumentsException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Command {
@@ -18,6 +16,8 @@ public class Command {
 	private String commandName;
 	private final String[] rawCommand;
 	private List<String> params;
+	private Set<String> optionsSet;
+	private String filepath;
 
 	public Command(String input) {
 		this.commandStr = input;
@@ -63,5 +63,34 @@ public class Command {
 				|| CommonConstants.EXIT_COMMAND.equals(this.commandName))) {
 			this.commandName = CommonConstants.NON_WC_COMMAND;
 		}
+	}
+
+	public void parseParams() {
+		setOptionsSet();
+		setFilepath();
+	}
+
+	public void setOptionsSet() {
+		this.optionsSet = this.getParams().stream()
+				.map(String::trim)
+				.filter(option -> option.startsWith(CommonConstants.COMMAND_OPTION_DELIMITER))
+				.map(option -> option.substring(1))
+				.flatMap(option -> option.chars().mapToObj(c -> String.valueOf((char) c)))
+				.collect(Collectors.toCollection(HashSet::new));
+	}
+
+	public void setFilepath() {
+		this.filepath = this.getParams().stream()
+				.map(String::trim)
+				.filter(option -> !option.startsWith(CommonConstants.COMMAND_OPTION_DELIMITER))
+				.findFirst().orElse("");
+	}
+
+	public Set<String> getParamsSet() {
+		return this.optionsSet;
+	}
+
+	public String getFilepath() {
+		return this.filepath;
 	}
 }

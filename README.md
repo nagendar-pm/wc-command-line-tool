@@ -6,10 +6,11 @@ Simple command line tool - wc - cloned using java
 2. Validates whether path provided is a file or not
 3. Exit command for exiting safely
 4. Added support for pipe command mode - Supports any number of pipes but with `wc` as terminal command
+5. Supports multiple options at once, both at a time
+   and separated by spaces (like `{-cl}` and `{-cl -m}`)
 
 ## TODO
-1. Integration of multiple options at once, both at a time
-and separated by spaces
+1. Multiple file options to be supported
 2. File path with spaces in names
 
 ## Diagrams
