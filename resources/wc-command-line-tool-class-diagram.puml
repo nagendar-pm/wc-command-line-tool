@@ -6,6 +6,9 @@ class Command {
     - String commandName
     - String[] rawCommand
     - List<String> params
+    - Set<String> optionsSet
+    - Set<String> filepaths
+    
 }
 
 interface CommandValidator {
@@ -13,10 +16,8 @@ interface CommandValidator {
 }
 
 class WcCommandValidator implements CommandValidator {
-    - Set<String> allowedOptions
     + boolean validate(Command command)
     - void validateCommandOptionsAndFilePath(Command command)
-    - void validateCommandFilePath(Command command)
     - void validateCommandFilePath(String filePath)
 }
 
@@ -34,13 +35,8 @@ interface CommandExecutor {
 
 class WcCommandExecutor implements CommandExecutor {
     - Printer printer
+    - OptionExecutorFactory optionExecutorFactory
     + void execute(Command command)
-    - void execute(String commandOption, String filePath)
-    - void computeEveryCount(String filePath)
-    - void computeCharacterCount(String filePath)
-    - void computeWordCount(String filePath)
-    - void computeLineCount(String filePath)
-    - void computeByteCount(String filePath)
 }
 
 class ExitCommandExecutor implements CommandExecutor {
@@ -98,5 +94,36 @@ class PipedCommandMode implements CommandMode {
 }
 
 CommandMode -up- CommandProcessorService
+
+interface OptionExecutor {
+	+ void executeOption(String filepath)
+}
+
+class ByteCountOptionExecutor implements OptionExecutor {
+    - Printer printer
+    + void executeOption(String filepath)
+}
+
+class LineCountOptionExecutor implements OptionExecutor {
+    - Printer printer
+    + void executeOption(String filepath)
+}
+
+class CharacterCountOptionExecutor implements OptionExecutor {
+    - Printer printer
+    + void executeOption(String filepath)
+}
+
+class WordCountOptionExecutor implements OptionExecutor {
+    - Printer printer
+    + void executeOption(String filepath)
+}
+
+class OptionExecutorFactory {
+	- Map<String, OptionExecutor> optionExecutorMap
+}
+
+OptionExecutorFactory -- OptionExecutor
+WcCommandExecutor -- OptionExecutorFactory
 
 @enduml
