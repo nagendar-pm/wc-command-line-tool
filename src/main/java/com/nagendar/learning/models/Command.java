@@ -11,17 +11,19 @@ import com.nagendar.learning.exceptions.InvalidNumberOfArgumentsException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.nagendar.learning.constants.CommonConstants.*;
+
 public class Command {
 	private final String commandStr;
 	private String commandName;
 	private final String[] rawCommand;
 	private List<String> params;
 	private Set<String> optionsSet;
-	private String filepath;
+	private Set<String> filepaths;
 
 	public Command(String input) {
 		this.commandStr = input;
-		this.rawCommand = this.commandStr.trim().split(CommonConstants.WHITESPACE_DELIMITER);
+		this.rawCommand = this.commandStr.trim().split(WHITESPACE_DELIMITER);
 		if (this.rawCommand.length == 0) {
 			throw new InvalidNumberOfArgumentsException("Invalid no of params provided");
 		}
@@ -59,9 +61,9 @@ public class Command {
 	}
 
 	public void setCommandName() {
-		if (!(CommonConstants.WC_COMMAND.equals(this.commandName)
-				|| CommonConstants.EXIT_COMMAND.equals(this.commandName))) {
-			this.commandName = CommonConstants.NON_WC_COMMAND;
+		if (!(WC_COMMAND.equals(this.commandName)
+				|| EXIT_COMMAND.equals(this.commandName))) {
+			this.commandName = NON_WC_COMMAND;
 		}
 	}
 
@@ -73,24 +75,24 @@ public class Command {
 	public void setOptionsSet() {
 		this.optionsSet = this.getParams().stream()
 				.map(String::trim)
-				.filter(option -> option.startsWith(CommonConstants.COMMAND_OPTION_DELIMITER))
+				.filter(option -> option.startsWith(COMMAND_OPTION_DELIMITER))
 				.map(option -> option.substring(1))
 				.flatMap(option -> option.chars().mapToObj(c -> String.valueOf((char) c)))
 				.collect(Collectors.toCollection(HashSet::new));
 	}
 
 	public void setFilepath() {
-		this.filepath = this.getParams().stream()
+		this.filepaths = this.getParams().stream()
 				.map(String::trim)
 				.filter(option -> !option.startsWith(CommonConstants.COMMAND_OPTION_DELIMITER))
-				.findFirst().orElse("");
+				.collect(Collectors.toCollection(HashSet::new));
 	}
 
 	public Set<String> getParamsSet() {
 		return this.optionsSet;
 	}
 
-	public String getFilepath() {
-		return this.filepath;
+	public Set<String> getFilepath() {
+		return this.filepaths;
 	}
 }

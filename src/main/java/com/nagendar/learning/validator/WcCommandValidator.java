@@ -25,14 +25,16 @@ public class WcCommandValidator implements CommandValidator{
 	private void validateCommandOptionsAndFilePath(Command command) {
 		command.parseParams();
 		Set<String> options = command.getParamsSet();
-		String filePath = command.getFilepath();
+		Set<String> filePaths = command.getFilepath();
 		for (String commandOption : options) {
 			if (!WC_COMMAND_ALLOWED_OPTIONS.contains(commandOption)) {
 				throw new IllegalArgumentException(
 						String.format("Arguments provided in the command are not allowed: -%s", commandOption));
 			}
 		}
-		validateCommandFilePath(filePath);
+		for (String filePath : filePaths) {
+			validateCommandFilePath(filePath);
+		}
 	}
 
 	private void validateCommandFilePath(String filePath) {

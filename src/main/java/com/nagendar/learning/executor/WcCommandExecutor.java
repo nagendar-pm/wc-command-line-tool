@@ -14,21 +14,26 @@ import java.util.Set;
 import static com.nagendar.learning.constants.CommonConstants.WC_COMMAND_ALLOWED_OPTIONS;
 
 public class WcCommandExecutor implements CommandExecutor{
+	private final Printer printer;
 	private final OptionExecutorFactory optionExecutorFactory;
 
 	public WcCommandExecutor(Printer printer) {
+		this.printer = printer;
 		optionExecutorFactory = new OptionExecutorFactory(printer);
 	}
 
 	@Override
 	public void execute(Command command) {
 		Set<String> setOptions = command.getParamsSet();
-		String filepath = command.getFilepath();
+		Set<String> filepaths = command.getFilepath();
 		if (setOptions.isEmpty()) {
 			setOptions.addAll(WC_COMMAND_ALLOWED_OPTIONS);
 		}
-		for (String option : setOptions) {
-			optionExecutorFactory.getOptionExecutor(option).executeOption(filepath);
+		for (String filepath : filepaths) {
+			printer.print(String.format("Executing file: %s", filepath));
+			for (String option : setOptions) {
+				optionExecutorFactory.getOptionExecutor(option).executeOption(filepath);
+			}
 		}
 	}
 
