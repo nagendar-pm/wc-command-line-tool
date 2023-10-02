@@ -31,6 +31,7 @@ Bytes: 342190
 Words: 58164
 Lines: 7145
 Characters: 325002
+
 nagi_wc "resources/some test.txt' "resources/test.txt"
 Executing file: resources/some test.txt
 Bytes: 21
@@ -42,6 +43,7 @@ Bytes: 342190
 Words: 58164
 Lines: 7145
 Characters: 325002
+
 nagi_wc -cl -lm 'resources/some test.txt' "resources/test.txt"
 Executing file: resources/some test.txt
 Bytes: 21
@@ -51,6 +53,7 @@ Executing file: resources/test.txt
 Bytes: 342190
 Lines: 7145
 Characters: 325002
+
 nagi_wc -clm -lm -w 'resources/some test.txt' "resources/test.txt"
 Executing file: resources/some test.txt
 Bytes: 21
@@ -62,6 +65,7 @@ Bytes: 342190
 Words: 58164
 Lines: 7145
 Characters: 325002
+
 seq 1 10 | sort | uniq | nagi_wc
 Executing the command `seq 1 10`...
 Output: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
