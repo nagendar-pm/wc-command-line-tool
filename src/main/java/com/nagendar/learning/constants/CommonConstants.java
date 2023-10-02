@@ -8,6 +8,8 @@ import java.util.Set;
 public interface CommonConstants {
 	String WHITESPACE_DELIMITER = " ";
 	String PIPE_OPERATOR = "\\|";
+	String DOUBLE_QUOTE_CHARACTER = "\"";
+	String SINGLE_QUOTE_CHARACTER = "'";
 	String WC_COMMAND = "nagi_wc";
 	String EXIT_COMMAND = "exit";
 	String TEMP_FILE_PATH = "resources/temp.txt";

@@ -9,10 +9,10 @@ Simple command line tool - wc - cloned using java
 5. Supports multiple options at once, both at a time
    and separated by spaces (like `{-cl}` and `{-cl -m}`)
 6. Supports multiple files at once
+7. Works for file paths with spaces, enclosed in quotes (`{", '}`)
 
 ## TODO
-1. File path with spaces in names
-2. Multiple char-sets to be supported
+1. Multiple char-sets to be supported
 
 ## Diagrams
 1. Class Diagram

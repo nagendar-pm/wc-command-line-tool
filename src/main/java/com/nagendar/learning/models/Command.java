@@ -82,10 +82,40 @@ public class Command {
 	}
 
 	public void setFilepath() {
-		this.filepaths = this.getParams().stream()
+		List<String> filePathsRaw = this.getParams().stream()
 				.map(String::trim)
-				.filter(option -> !option.startsWith(CommonConstants.COMMAND_OPTION_DELIMITER))
-				.collect(Collectors.toCollection(HashSet::new));
+				.filter(option -> !option.startsWith(COMMAND_OPTION_DELIMITER))
+				.toList();
+		List<String> filePathsWithSpaces = new ArrayList<>();
+
+		StringBuilder prefix = null;
+		for (String filepathRaw : filePathsRaw) {
+			if ((filepathRaw.startsWith(DOUBLE_QUOTE_CHARACTER) || filepathRaw.startsWith(SINGLE_QUOTE_CHARACTER))
+				&& (filepathRaw.endsWith(DOUBLE_QUOTE_CHARACTER) || filepathRaw.endsWith(SINGLE_QUOTE_CHARACTER))) {
+				prefix = new StringBuilder();
+				prefix.append(filepathRaw, 1, filepathRaw.length()-1);
+				filePathsWithSpaces.add(prefix.toString());
+				prefix = null;
+			}
+			else if (filepathRaw.startsWith(DOUBLE_QUOTE_CHARACTER) || filepathRaw.startsWith(SINGLE_QUOTE_CHARACTER)) {
+				prefix = new StringBuilder();
+				prefix.append(filepathRaw.substring(1)).append(WHITESPACE_DELIMITER);
+			}
+			else if ((filepathRaw.endsWith(DOUBLE_QUOTE_CHARACTER) || filepathRaw.endsWith(SINGLE_QUOTE_CHARACTER))
+					&& Objects.nonNull(prefix)) {
+				prefix.append(filepathRaw, 0, filepathRaw.length()-1);
+				filePathsWithSpaces.add(prefix.toString());
+				prefix = null;
+			}
+			else if (Objects.nonNull(prefix)) {
+				prefix.append(filepathRaw).append(WHITESPACE_DELIMITER);
+			}
+			else {
+				filePathsWithSpaces.add(filepathRaw);
+			}
+		}
+
+		this.filepaths = new HashSet<>(filePathsWithSpaces);
 	}
 
 	public Set<String> getParamsSet() {
